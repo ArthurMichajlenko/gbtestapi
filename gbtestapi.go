@@ -10,6 +10,7 @@
 package main
 
 import (
+	"strconv"
 	"log"
 
 	"github.com/rivo/tview"
@@ -17,9 +18,18 @@ import (
 
 func main() {
 	log.Println("Start...")
-	box := tview.NewBox().SetBorder(true).SetTitle("Hello, world!")
-	// app:=tview.NewApplication()
-	if err:= tview.NewApplication().SetRoot(box,true).Run(); err != nil {
+	app := tview.NewApplication()
+	form := tview.NewForm()
+	form.SetBorder(true).SetTitle("Test API")
+	form.AddInputField("ID", "", 10, tview.InputFieldInteger, nil).
+		AddInputField("Name", "", 20, nil, nil)
+	form.AddButton("Ok", func() {
+		app.Stop()
+		id,_:=strconv.Atoi(form.GetFormItemByLabel("ID").(*tview.InputField).GetText())
+		log.Println(form.GetFormItemByLabel("ID").(*tview.InputField).GetText(), id)
+		log.Println(form.GetFormItemByLabel("Name").(*tview.InputField).GetText())
+	})
+	if err := app.SetRoot(form, true).Run(); err != nil {
 		panic(err)
 	}
 }
