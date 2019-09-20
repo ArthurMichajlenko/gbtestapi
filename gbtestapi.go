@@ -10,8 +10,8 @@
 package main
 
 import (
-	"strconv"
 	"log"
+	"strconv"
 
 	"github.com/rivo/tview"
 )
@@ -25,7 +25,7 @@ func main() {
 		AddInputField("Name", "", 20, nil, nil)
 	form.AddButton("Ok", func() {
 		app.Stop()
-		id,_:=strconv.Atoi(form.GetFormItemByLabel("ID").(*tview.InputField).GetText())
+		id, _ := strconv.Atoi(form.GetFormItemByLabel("ID").(*tview.InputField).GetText())
 		log.Println(form.GetFormItemByLabel("ID").(*tview.InputField).GetText(), id)
 		log.Println(form.GetFormItemByLabel("Name").(*tview.InputField).GetText())
 	})
