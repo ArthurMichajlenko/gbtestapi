@@ -21,9 +21,11 @@ func (r *Orders) Marshal() ([]byte, error) {
 
 // Order is a single order. NOTE: Confirmation 1 - completed, 0 - awaiting, -1 - canceled. DeliveryDelay in minutes
 type Order struct {
-	ID            int64  `json:"id"`            
-	Product       string `json:"product"`       
-	Quantity      int64  `json:"quantity"`      
-	Confirmation  int64  `json:"confirmation"`  
+	ID            int64  `json:"id"`
+	Product       string `json:"product"`
+	Quantity      int64  `json:"quantity"`
+	Confirmation  int64  `json:"confirmation"`
 	DeliveryDelay int64  `json:"delivery_delay"`
+	DateStart     string `json:"date_start"`
+	DateFinish    string `json:"date_finish"`
 }

@@ -4,6 +4,8 @@
         "product": "",
         "quantity": 0,
         "confirmation": 0,
-        "delivery_delay": 0
+        "delivery_delay": 0,
+        "date_start": "2006-01-01T15:04:05",
+        "date_finish": "2006-01-01T15:04:05"
     }
 ]

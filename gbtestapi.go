@@ -11,25 +11,28 @@ package main
 
 import (
 	"log"
-	"strconv"
 
-	"github.com/rivo/tview"
+	"fyne.io/fyne/dialog"
+
+	"fyne.io/fyne/app"
+	"fyne.io/fyne/theme"
+	"fyne.io/fyne/widget"
 )
 
 func main() {
 	log.Println("Start...")
-	app := tview.NewApplication()
-	form := tview.NewForm()
-	form.SetBorder(true).SetTitle("Test API")
-	form.AddInputField("ID", "", 10, tview.InputFieldInteger, nil).
-		AddInputField("Name", "", 20, nil, nil)
-	form.AddButton("Ok", func() {
-		app.Stop()
-		id, _ := strconv.Atoi(form.GetFormItemByLabel("ID").(*tview.InputField).GetText())
-		log.Println(form.GetFormItemByLabel("ID").(*tview.InputField).GetText(), id)
-		log.Println(form.GetFormItemByLabel("Name").(*tview.InputField).GetText())
-	})
-	if err := app.SetRoot(form, true).Run(); err != nil {
-		panic(err)
-	}
+	app := app.New()
+	app.Settings().SetTheme(theme.LightTheme())
+	win := app.NewWindow("Gelibert Test API")
+	win.SetContent(widget.NewVBox(widget.NewLabel("Test API"),
+		widget.NewEntry(),
+		widget.NewButton("Quit", func() {
+			dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
+				if ok {
+					app.Quit()
+				}
+			}, win).Show()
+		}),
+	))
+	win.ShowAndRun()
 }
