@@ -2,10 +2,12 @@
     {
         "id": 0,
         "product": "",
-        "quantity": 0,
+        "payment_method": "",
+        "quantity_to": 0,
+        "quantity_from": 0,
         "confirmation": 0,
         "delivery_delay": 0,
-        "date_start": "2006-01-01T15:04:05",
-        "date_finish": "2006-01-01T15:04:05"
+        "date_start": "2006-01-02 15:04:05",
+        "date_finish": "2006-01-02 15:04:05"
     }
 ]

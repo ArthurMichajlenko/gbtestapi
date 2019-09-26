@@ -12,6 +12,8 @@ package main
 import (
 	"log"
 
+	"fyne.io/fyne"
+
 	"fyne.io/fyne/dialog"
 
 	"fyne.io/fyne/app"
@@ -24,15 +26,48 @@ func main() {
 	app := app.New()
 	app.Settings().SetTheme(theme.LightTheme())
 	win := app.NewWindow("Gelibert Test API")
-	win.SetContent(widget.NewVBox(widget.NewLabel("Test API"),
-		widget.NewEntry(),
-		widget.NewButton("Quit", func() {
-			dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
-				if ok {
-					app.Quit()
-				}
-			}, win).Show()
-		}),
-	))
+	win.SetMainMenu(fyne.NewMainMenu(fyne.NewMenu("File",
+		fyne.NewMenuItem("Save...", func() { log.Println("JSON to File") }),
+		fyne.NewMenuItem("Load...", func() { log.Println("JSON from File") }),
+	)))
+	tabs := widget.NewTabContainer(
+		widget.NewTabItemWithIcon("Curier", theme.MailSendIcon(),
+			widget.NewVBox(
+				widget.NewButton("Quit...", func() {
+					dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
+						if ok {
+							app.Quit()
+						}
+					}, win).Show() 
+				}),
+			),
+		),
+		widget.NewTabItemWithIcon("Client", theme.FolderOpenIcon(),
+			widget.NewVBox(
+				widget.NewButton("Quit...", func() {
+					dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
+						if ok {
+							app.Quit()
+						}
+					}, win).Show()
+				}),
+			),
+		),
+		widget.NewTabItemWithIcon("Order", theme.ContentCopyIcon(),
+			widget.NewVBox(
+				widget.NewButton("Quit...", func() {
+					dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
+						if ok {
+							app.Quit()
+						}
+					}, win).Show()
+				}),
+			),
+		),
+	)
+	
+	win.Resize(fyne.NewSize(800, 600))
+	tabs.SetTabLocation(widget.TabLocationLeading)
+	win.SetContent(tabs)
 	win.ShowAndRun()
 }
