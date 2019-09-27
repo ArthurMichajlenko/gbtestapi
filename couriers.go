@@ -2,7 +2,9 @@
 
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 // Couriers is array of courier
 type Couriers []Courier

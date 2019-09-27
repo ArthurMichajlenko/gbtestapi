@@ -31,7 +31,7 @@ func main() {
 		fyne.NewMenuItem("Load...", func() { log.Println("JSON from File") }),
 	)))
 	tabs := widget.NewTabContainer(
-		widget.NewTabItemWithIcon("Curier", theme.MailSendIcon(),
+		widget.NewTabItemWithIcon("Courier", theme.MailSendIcon(),
 			widget.NewVBox(
 				widget.NewButton("Quit...", func() {
 					dialog.NewConfirm("Quit", "Quit application...", func(ok bool) {
