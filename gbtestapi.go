@@ -65,9 +65,9 @@ func main() {
 		order.ClientID = i
 		order.Product = fmt.Sprintf("Product_%d", i)
 		order.PaymentMethod = "Cash"
-		order.QuantityTo = float64(i+1)
+		order.QuantityTo = float64(i + 1)
 		order.QuantityFrom = float64(i)
-		order.OrderCost = 10*(float64(i)+0.5)
+		order.OrderCost = 10 * (float64(i) + 0.5)
 		order.OrderStatus = 0
 		order.DateStart = strings.Split(time.Now().String(), ".")[0]
 		ordersList = append(ordersList, order)
