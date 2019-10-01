@@ -1,6 +1,8 @@
 [
     {
         "id": 0,
+        "courier_id": 0,
+        "client_id": 0,
         "product": "",
         "payment_method": "",
         "quantity_to": 0.0,

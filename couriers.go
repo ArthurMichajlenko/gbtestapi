@@ -23,15 +23,17 @@ func (r *Couriers) Marshal() ([]byte, error) {
 
 // Courier is a single courier
 type Courier struct {
-	ID              int64           `json:"id"`              
-	Name            string          `json:"name"`            
-	CarNumber       string          `json:"car_number"`      
+	ID              int             `json:"id"`
+	Imei            int64           `json:"imei"`
+	Tel             string          `json:"tel"`
+	Name            string          `json:"name"`
+	CarNumber       string          `json:"car_number"`
 	CurrentLocation CurrentLocation `json:"current_location"`
 }
 
 // CurrentLocation is a location of the courier
 type CurrentLocation struct {
-	Latitude  float64 `json:"latitude"` 
+	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
-	Address   string  `json:"address"`  
+	Address   string  `json:"address"`
 }
