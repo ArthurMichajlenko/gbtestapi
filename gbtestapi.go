@@ -27,9 +27,9 @@ func main() {
 		courier.Tel = fmt.Sprintf("Tel_%d", i)
 		courier.Name = fmt.Sprintf("Name_%d", i)
 		courier.CarNumber = fmt.Sprintf("CarNumber_%d", i)
-		courier.CurrentLocation.Latitude = 0
-		courier.CurrentLocation.Longitude = 0
-		courier.CurrentLocation.Address = fmt.Sprintf("Address_%d", i)
+		courier.Latitude = 0
+		courier.Longitude = 0
+		courier.Address = fmt.Sprintf("Address_%d", i)
 		couriersList = append(couriersList, courier)
 	}
 	writeData, _ := couriersList.Marshal()
