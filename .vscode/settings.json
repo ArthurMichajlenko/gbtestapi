@@ -3,5 +3,24 @@
         "gbtestapi",
         "rivo",
         "tview"
-    ]
+    ],
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "ArthurTest",
+            "dialect": "MySQL",
+            "name": "Dev",
+            "password": "Nfnmzyf",
+            "port": 3306,
+            "server": "217.12.127.253",
+            "username": "arthur"
+        },
+        {
+            "askForPassword": false,
+            "database": "./gelibert.db",
+            "dialect": "SQLite",
+            "name": "gelibert"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
