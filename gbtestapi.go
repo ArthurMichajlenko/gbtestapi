@@ -15,9 +15,17 @@ import (
 	"log"
 	"strings"
 	"time"
+
+	"github.com/jmoiron/sqlx"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
+	db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	if err != nil {
+		log.Println(err)
+	}
 	log.Println("Start create Couriers JSON file...")
 	var couriersList Couriers
 	for i := 0; i < 20; i++ {
@@ -32,8 +40,15 @@ func main() {
 		courier.Address = fmt.Sprintf("Address_%d", i)
 		couriersList = append(couriersList, courier)
 	}
+	for _, courier := range couriersList {
+		_, err := db.NamedExec(`INSERT INTO Couriers (id, imei, tel, name, car_number, latitude, longitude, address)
+			VALUES (:id, :imei, :tel, :name, :car_number, :latitude, :longitude, :address)`, &courier)
+		if err != nil {
+			log.Println(err)
+		}
+	}
 	writeData, _ := couriersList.Marshal()
-	err := ioutil.WriteFile("couriers.json", writeData, 0666)
+	err = ioutil.WriteFile("couriers.json", writeData, 0666)
 	if err != nil {
 		log.Println(err)
 	}
@@ -48,6 +63,13 @@ func main() {
 		client.Tel = fmt.Sprintf("Tel_%d", i)
 		client.Address = fmt.Sprintf("Address_%d", i)
 		clientsList = append(clientsList, client)
+	}
+	for _, client := range clientsList {
+		_, err := db.NamedExec(`INSERT INTO Clients (id, name, tel, address)
+		VALUES (:id, :name, :tel, :address)`, &client)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	writeData, _ = clientsList.Marshal()
 	err = ioutil.WriteFile("clients.json", writeData, 0666)
@@ -69,8 +91,17 @@ func main() {
 		order.QuantityFrom = float64(i)
 		order.OrderCost = 10 * (float64(i) + 0.5)
 		order.OrderStatus = 0
+		order.DeliveryDelay = 0
 		order.DateStart = strings.Split(time.Now().String(), ".")[0]
+		order.DateFinish = ""
 		ordersList = append(ordersList, order)
+	}
+	for _, order := range ordersList {
+		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
+			 VALUES (:id, :courier_id, :client_id, :product, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	writeData, _ = ordersList.Marshal()
 	err = ioutil.WriteFile("orders.json", writeData, 0666)
