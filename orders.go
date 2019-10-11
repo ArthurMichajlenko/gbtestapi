@@ -27,7 +27,8 @@ type Order struct {
 	ID            int     `json:"id" db:"id"`
 	CourierID     int     `json:"courier_id" db:"courier_id"`
 	ClientID      int     `json:"client_id" db:"client_id"`
-	Product       string  `json:"product" db:"product"`
+	ProductTo     string  `json:"product_to" db:"product_to"`
+	ProductFrom   string  `json:"product_from" db:"product_from"`
 	PaymentMethod string  `json:"payment_method" db:"payment_method"`
 	QuantityTo    float64 `json:"quantity_to" db:"quantity_to"`
 	QuantityFrom  float64 `json:"quantity_from" db:"quantity_from"`

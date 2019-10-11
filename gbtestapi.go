@@ -85,7 +85,8 @@ func main() {
 		order.ID = i
 		order.CourierID = i
 		order.ClientID = i
-		order.Product = fmt.Sprintf("Product_%d", i)
+		order.ProductTo = fmt.Sprintf("ProductTo_%d", i)
+		order.ProductFrom = fmt.Sprintf("ProductFrom_%d", i)
 		order.PaymentMethod = "Cash"
 		order.QuantityTo = float64(i + 1)
 		order.QuantityFrom = float64(i)
@@ -97,8 +98,8 @@ func main() {
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
-			 VALUES (:id, :courier_id, :client_id, :product, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
+		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
+			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
 		if err != nil {
 			log.Println(err)
 		}
