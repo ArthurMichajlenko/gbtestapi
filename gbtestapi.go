@@ -52,7 +52,7 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println("Stop create Couriers JSON file...")
+	log.Println("Stop create Couriers JSON file....")
 
 	log.Println("Start create Clients JSON file...")
 	var clientsList Clients
