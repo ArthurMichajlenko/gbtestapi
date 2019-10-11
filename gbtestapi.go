@@ -98,7 +98,7 @@ func main() {
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
+		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
 			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
 		if err != nil {
 			log.Println(err)
