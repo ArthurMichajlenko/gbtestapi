@@ -18,13 +18,13 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	// _ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
-	db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
+	db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	// db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
 	if err != nil {
 		log.Println(err)
 	}
