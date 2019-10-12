@@ -23,8 +23,8 @@ import (
 )
 
 func main() {
-	db, err := sqlx.Connect("sqlite3", "gelibert.db")
-	// db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
+	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
 	if err != nil {
 		log.Println(err)
 	}
