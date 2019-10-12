@@ -18,11 +18,13 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	_ "github.com/mattn/go-sqlite3"
+	// _ "github.com/mattn/go-sqlite3"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
 	if err != nil {
 		log.Println(err)
 	}
@@ -41,7 +43,7 @@ func main() {
 		couriersList = append(couriersList, courier)
 	}
 	for _, courier := range couriersList {
-		_, err := db.NamedExec(`INSERT INTO Couriers (id, imei, tel, name, car_number, latitude, longitude, address)
+		_, err := db.NamedExec(`INSERT INTO couriers (id, imei, tel, name, car_number, latitude, longitude, address)
 			VALUES (:id, :imei, :tel, :name, :car_number, :latitude, :longitude, :address)`, &courier)
 		if err != nil {
 			log.Println(err)
@@ -65,7 +67,7 @@ func main() {
 		clientsList = append(clientsList, client)
 	}
 	for _, client := range clientsList {
-		_, err := db.NamedExec(`INSERT INTO Clients (id, name, tel, address)
+		_, err := db.NamedExec(`INSERT INTO clients (id, name, tel, address)
 		VALUES (:id, :name, :tel, :address)`, &client)
 		if err != nil {
 			log.Println(err)
@@ -98,7 +100,7 @@ func main() {
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		_, err := db.NamedExec(`INSERT INTO Orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
+		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
 			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
 		if err != nil {
 			log.Println(err)
