@@ -28,6 +28,7 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
+	
 	log.Println("Start create Couriers JSON file...")
 	var couriersList Couriers
 	for i := 0; i < 20; i++ {
