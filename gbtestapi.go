@@ -23,8 +23,8 @@ import (
 )
 
 func main() {
-	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
-	db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
+	db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	// db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
 	if err != nil {
 		log.Println(err)
 	}
@@ -101,10 +101,10 @@ func main() {
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start)
-			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start)`, &order)
-		// _, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
-		// 	 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
+		// _, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start)
+		// 	 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start)`, &order)
+		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
+			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
 		if err != nil {
 			log.Println(err)
 		}
