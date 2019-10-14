@@ -18,8 +18,15 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	_ "github.com/mattn/go-sqlite3"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
+)
+
+// OrderCancel = -1 order cancelled, OrderWait = 0 order in queue, OrderComplete = 1 order finished
+const (
+	OrderCancel = iota - 1
+	OrderWait
+	OrderComplete
 )
 
 func main() {
@@ -28,7 +35,7 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
-	
+
 	log.Println("Start create Couriers JSON file...")
 	var couriersList Couriers
 	for i := 0; i < 20; i++ {
