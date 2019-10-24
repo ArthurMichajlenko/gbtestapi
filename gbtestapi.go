@@ -104,7 +104,7 @@ func main() {
 		order.OrderStatus = 0
 		order.DeliveryDelay = 0
 		order.DateStart = strings.Split(time.Now().String(), ".")[0]
-		order.DateFinish = strings.Split(time.Now().String(), ".")[0]
+		order.DateFinish = strings.Split(time.Now().String(), ".")[0] 
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
