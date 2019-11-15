@@ -23,15 +23,15 @@ import (
 )
 
 // OrderCancel = -1 order cancelled, OrderWait = 0 order in queue, OrderComplete = 1 order finished
-const (
-	OrderCancel = iota - 1
-	OrderWait
-	OrderComplete
-)
+// const (
+// 	OrderCancel = iota - 1
+// 	OrderWait
+// 	OrderComplete
+// )
 
 func main() {
-	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
-	db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
+	db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	// db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
 	if err != nil {
 		log.Println(err)
 	}
@@ -92,29 +92,48 @@ func main() {
 	var ordersList Orders
 	for i := 0; i < 20; i++ {
 		var order Order
+		var consist Consist
 		order.ID = i
 		order.CourierID = i
 		order.ClientID = i
-		order.ProductTo = fmt.Sprintf("ProductTo_%d", i)
-		order.ProductFrom = fmt.Sprintf("ProductFrom_%d", i)
 		order.PaymentMethod = "Cash"
-		order.QuantityTo = float64(i + 1)
-		order.QuantityFrom = float64(i)
+		for j := 0; j < 4; j++ {
+			if j%2 == 0 {
+				consist.Delivery = true
+			} else {
+				consist.Delivery = false
+			}
+			if consist.Delivery {
+				consist.Product = fmt.Sprintf("ProductTo_%d/%d", i, j)
+				consist.Quantity = float64(j + 1)
+			} else {
+				consist.Product = fmt.Sprintf("ProductFrom_%d/%d", i, j)
+				consist.Quantity = float64(j + 1)
+			}
+			order.Consists = append(order.Consists, consist)
+		}
 		order.OrderCost = 10 * (float64(i) + 0.5)
-		order.OrderStatus = 0
+		order.Delivered = false
 		order.DeliveryDelay = 0
 		order.DateStart = strings.Split(time.Now().String(), ".")[0]
 		order.DateFinish = ""
-		// order.DateFinish = strings.Split(time.Now().String(), ".")[0] 
+		// order.DateFinish = strings.Split(time.Now().String(), ".")[0]
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		// _, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start)
-		// 	 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start)`, &order)
-		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, product_to, product_from, payment_method, quantity_to, quantity_from, order_cost, order_status, delivery_delay, date_start, date_finish)
-			 VALUES (:id, :courier_id, :client_id, :product_to, :product_from, :payment_method, :quantity_to, :quantity_from, :order_cost, :order_status, :delivery_delay, :date_start, :date_finish)`, &order)
+		// _, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, payment_method, order_cost, delivered, delivery_delay, date_start)
+		// 	 VALUES (:id, :courier_id, :client_id, :payment_method, :order_cost, :delivered, :delivery_delay, :date_start)`, &order)
+		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, payment_method, order_cost, delivered, delivery_delay, date_start, date_finish)
+			 VALUES (:id, :courier_id, :client_id, :payment_method, :order_cost, :delivered, :delivery_delay, :date_start, :date_finish)`, &order)
 		if err != nil {
 			log.Println(err)
+		}
+		for _, consist := range order.Consists {
+			_, err := db.Exec(`INSERT INTO consists (id, product, quantity, delivery) 
+			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Delivery)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 	writeData, _ = ordersList.Marshal()
