@@ -10,6 +10,7 @@
 package main
 
 import (
+	"math"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -92,25 +93,21 @@ func main() {
 	var ordersList Orders
 	for i := 0; i < 20; i++ {
 		var order Order
-		var consist Consist
+		var consistTo Consist
+		var consistFrom Consist
 		order.ID = i
 		order.CourierID = i
 		order.ClientID = i
 		order.PaymentMethod = "Cash"
 		for j := 0; j < 4; j++ {
-			if j%2 == 0 {
-				consist.Delivery = true
-			} else {
-				consist.Delivery = false
-			}
-			if consist.Delivery {
-				consist.Product = fmt.Sprintf("ProductTo_%d/%d", i, j)
-				consist.Quantity = float64(j + 1)
-			} else {
-				consist.Product = fmt.Sprintf("ProductFrom_%d/%d", i, j)
-				consist.Quantity = float64(j + 1)
-			}
-			order.Consists = append(order.Consists, consist)
+			consistTo.Product = fmt.Sprintf("ProductTo_%d/%d", i, j)
+			consistTo.Quantity = float64(j + 1)
+			consistTo.Price = math.Round(float64(j+1)*0.3*100)/100
+			order.ConsistsTo = append(order.ConsistsTo, consistTo)
+			consistFrom.Product = fmt.Sprintf("ProductFrom_%d/%d", i, j)
+			consistFrom.Quantity = float64(j + 1)
+			consistFrom.Price = math.Round(float64(j+1)*0.2*100)/100
+			order.ConsistsFrom = append(order.ConsistsFrom, consistFrom)
 		}
 		order.OrderCost = 10 * (float64(i) + 0.5)
 		order.Delivered = false
@@ -128,9 +125,16 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		for _, consist := range order.Consists {
-			_, err := db.Exec(`INSERT INTO consists (id, product, quantity, delivery) 
-			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Delivery)
+		for _, consist := range order.ConsistsTo {
+			_, err := db.Exec(`INSERT INTO consists_to (id, product, quantity, price) 
+			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Price)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+		for _, consist := range order.ConsistsFrom {
+			_, err := db.Exec(`INSERT INTO consists_from (id, product, quantity, price) 
+			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Price)
 			if err != nil {
 				log.Println(err)
 			}
