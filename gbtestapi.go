@@ -10,11 +10,11 @@
 package main
 
 import (
-	"math"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
+	"math"
+	// "strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -31,8 +31,8 @@ import (
 // )
 
 func main() {
-	db, err := sqlx.Connect("sqlite3", "gelibert.db")
-	// db, err := sqlx.Connect("mysql", "arthur:Nfnmzyf@tcp(217.12.127.253:3306)/gelibert")
+	// db, err := sqlx.Connect("sqlite3", "gelibert.db")
+	db, err := sqlx.Connect("mysql", "root:Nfnmzyf@tcp(localhost:3306)/gelibert?parseTime=true&loc=Local")
 	if err != nil {
 		log.Println(err)
 	}
@@ -49,6 +49,7 @@ func main() {
 		courier.Latitude = 0
 		courier.Longitude = 0
 		courier.Address = fmt.Sprintf("Address_%d", i)
+		courier.TimeStamp = time.Now().Truncate(time.Second)
 		couriersList = append(couriersList, courier)
 	}
 	for _, courier := range couriersList {
@@ -102,38 +103,40 @@ func main() {
 		for j := 0; j < 4; j++ {
 			consistTo.Product = fmt.Sprintf("ProductTo_%d/%d", i, j)
 			consistTo.Quantity = float64(j + 1)
-			consistTo.Price = math.Round(float64(j+1)*0.3*100)/100
+			consistTo.Price = math.Round(float64(j+1)*0.3*100) / 100
 			order.ConsistsTo = append(order.ConsistsTo, consistTo)
 			consistFrom.Product = fmt.Sprintf("ProductFrom_%d/%d", i, j)
 			consistFrom.Quantity = float64(j + 1)
-			consistFrom.Price = math.Round(float64(j+1)*0.2*100)/100
+			consistFrom.Price = math.Round(float64(j+1)*0.2*100) / 100
 			order.ConsistsFrom = append(order.ConsistsFrom, consistFrom)
 		}
 		order.OrderCost = 10 * (float64(i) + 0.5)
 		order.Delivered = false
 		order.DeliveryDelay = 0
-		order.DateStart = strings.Split(time.Now().String(), ".")[0]
-		order.DateFinish = ""
+		order.DateStart = time.Now().Truncate(time.Second)
+		// log.Println(order.DateStart.String())
+		// order.DateFinish = time.Now().Truncate(time.Second)
+		order.TimeStamp = time.Now().Truncate(time.Second)
+		// order.DateStart = strings.Split(time.Now().String(), ".")[0]
+		// order.DateFinish = ""
 		// order.DateFinish = strings.Split(time.Now().String(), ".")[0]
 		ordersList = append(ordersList, order)
 	}
 	for _, order := range ordersList {
-		// _, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, payment_method, order_cost, delivered, delivery_delay, date_start)
-		// 	 VALUES (:id, :courier_id, :client_id, :payment_method, :order_cost, :delivered, :delivery_delay, :date_start)`, &order)
-		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, payment_method, order_cost, delivered, delivery_delay, date_start, date_finish)
-			 VALUES (:id, :courier_id, :client_id, :payment_method, :order_cost, :delivered, :delivery_delay, :date_start, :date_finish)`, &order)
+		_, err := db.NamedExec(`INSERT INTO orders (id, courier_id, client_id, payment_method, order_cost, delivered, delivery_delay, date_start)
+			 VALUES (:id, :courier_id, :client_id, :payment_method, :order_cost, :delivered, :delivery_delay, :date_start)`, &order)
 		if err != nil {
 			log.Println(err)
 		}
 		for _, consist := range order.ConsistsTo {
-			_, err := db.Exec(`INSERT INTO consists_to (id, product, quantity, price) 
+			_, err := db.Exec(`INSERT INTO consists_to (id, product, quantity, price)
 			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Price)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 		for _, consist := range order.ConsistsFrom {
-			_, err := db.Exec(`INSERT INTO consists_from (id, product, quantity, price) 
+			_, err := db.Exec(`INSERT INTO consists_from (id, product, quantity, price)
 			VALUES (?, ?, ?, ?)`, order.ID, consist.Product, consist.Quantity, consist.Price)
 			if err != nil {
 				log.Println(err)

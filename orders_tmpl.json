@@ -22,6 +22,7 @@
         "delivered": false,
         "delivery_delay": 0,
         "date_start": "2006-01-02 15:04:05",
-        "date_finish": "2006-01-02 15:04:05"
+        "date_finish": "2006-01-02 15:04:05",
+        "timestamp": ""
     }
 ]
